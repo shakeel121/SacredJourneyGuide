@@ -13,7 +13,7 @@ import {
   Image, 
   FileText, 
   Home, 
-  Mosque, 
+  Church, 
   Map, 
   Settings, 
   Plus,
@@ -160,7 +160,7 @@ export default function AdminDashboard() {
                     className="w-full justify-start" 
                     onClick={() => setActiveTab("umrah")}
                   >
-                    <Mosque className="mr-2 h-4 w-4" />
+                    <Church className="mr-2 h-4 w-4" />
                     {t("Umrah Guides", "أدلة العمرة")}
                   </Button>
                   <Button 

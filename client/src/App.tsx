@@ -14,7 +14,11 @@ import DuasCollection from "@/pages/duas-collection";
 import Scholars from "@/pages/scholars";
 import Blog from "@/pages/blog";
 import BlogPost from "@/pages/blog-post";
+import SignIn from "@/pages/signin";
+import SignUp from "@/pages/signup";
+import AdminDashboard from "@/pages/admin/dashboard";
 import { LanguageProvider } from "@/hooks/use-language";
+import { AuthProvider } from "@/hooks/use-auth";
 import { useEffect } from "react";
 
 function Router() {
@@ -39,6 +43,9 @@ function Router() {
           <Route path="/scholars" component={Scholars} />
           <Route path="/blog/:slug" component={BlogPost} />
           <Route path="/blog" component={Blog} />
+          <Route path="/signin" component={SignIn} />
+          <Route path="/signup" component={SignUp} />
+          <Route path="/admin/dashboard" component={AdminDashboard} />
           <Route component={NotFound} />
         </Switch>
       </main>
@@ -51,10 +58,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </AuthProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

@@ -2,12 +2,21 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/hooks/use-language";
-import { Church, Menu, FileText } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Church, Menu, FileText, User, LogIn, LogOut, LayoutDashboard } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
   const [location] = useLocation();
   const { language, setLanguage, t } = useLanguage();
+  const { currentUser, isAdmin, userSignOut } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     // Check localStorage on initial render
     if (typeof window !== 'undefined') {
@@ -26,6 +35,10 @@ export default function Header() {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('darkMode', 'false');
     }
+  };
+
+  const handleSignOut = async () => {
+    await userSignOut();
   };
 
   const navItems = [
@@ -102,6 +115,44 @@ export default function Header() {
               </Button>
             </Link>
             
+            {currentUser ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative">
+                    <User className="h-5 w-5" />
+                    <span className="absolute top-0 right-0 h-2 w-2 bg-green-500 rounded-full"></span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <div className="px-2 py-1.5 text-sm font-medium">
+                    {currentUser.email}
+                  </div>
+                  <DropdownMenuSeparator />
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin/dashboard">
+                        <div className="flex items-center cursor-pointer w-full">
+                          <LayoutDashboard className="mr-2 h-4 w-4" />
+                          <span>{t("Admin Dashboard", "لوحة التحكم")}</span>
+                        </div>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>{t("Sign out", "تسجيل الخروج")}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/signin">
+                <Button variant="outline" size="sm" className="hidden sm:flex">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  {t("Sign in", "تسجيل الدخول")}
+                </Button>
+              </Link>
+            )}
+            
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="md:hidden">
@@ -129,6 +180,33 @@ export default function Header() {
                         </span>
                       </Link>
                     ))}
+                    
+                    {currentUser ? (
+                      <>
+                        {isAdmin && (
+                          <Link href="/admin/dashboard">
+                            <span className="font-medium py-2 border-b border-gray-100 dark:border-gray-800 block cursor-pointer">
+                              <LayoutDashboard className="inline-block mr-2 h-4 w-4" />
+                              {t("Admin Dashboard", "لوحة التحكم")}
+                            </span>
+                          </Link>
+                        )}
+                        <span 
+                          className="font-medium py-2 border-b border-gray-100 dark:border-gray-800 block cursor-pointer"
+                          onClick={handleSignOut}
+                        >
+                          <LogOut className="inline-block mr-2 h-4 w-4" />
+                          {t("Sign out", "تسجيل الخروج")}
+                        </span>
+                      </>
+                    ) : (
+                      <Link href="/signin">
+                        <span className="font-medium py-2 border-b border-gray-100 dark:border-gray-800 block cursor-pointer">
+                          <LogIn className="inline-block mr-2 h-4 w-4" />
+                          {t("Sign in", "تسجيل الدخول")}
+                        </span>
+                      </Link>
+                    )}
                   </nav>
                 </div>
               </SheetContent>
