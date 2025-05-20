@@ -8,6 +8,9 @@ import DuasSection from "@/components/home/DuasSection";
 import AdSection from "@/components/advertisements/AdSection";
 import ScholarsSection from "@/components/home/ScholarsSection";
 import CTASection from "@/components/home/CTASection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
+import StatisticsSection from "@/components/home/StatisticsSection";
+import MobileAppSection from "@/components/home/MobileAppSection";
 import { Helmet } from "react-helmet";
 import { useLanguage } from "@/hooks/use-language";
 
@@ -25,14 +28,22 @@ export default function Home() {
             "منصة تعليمية افتراضية شاملة للإرشاد الإسلامي الأصيل حول مناسك الحج والعمرة من علماء السلف السعوديين."
           )}
         />
+        <meta property="og:title" content={t("Authentic Hajj & Umrah Guide", "دليل الحج والعمرة الأصيل")} />
+        <meta property="og:description" content={t("Authentic guidance for Hajj and Umrah rituals", "إرشاد أصيل لمناسك الحج والعمرة")} />
+        <meta property="og:image" content="https://images.unsplash.com/photo-1519058082350-08716243d33a?q=80&w=2073" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
       
       <HeroSection />
       <FeaturesSection />
+      <StatisticsSection />
       <AdvertisementBanner location="banner" />
       <HajjSection />
       <UmrahSection />
+      <TestimonialsSection />
       <MasjidSection />
+      <MobileAppSection />
       <DuasSection />
       <AdSection />
       <ScholarsSection />
