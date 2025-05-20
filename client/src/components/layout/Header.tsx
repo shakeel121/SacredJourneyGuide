@@ -1,15 +1,23 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/lib/ThemeProvider";
 import { useLanguage } from "@/hooks/use-language";
-import { Church, Menu, X, Sun, Moon } from "lucide-react";
+import { Church, Menu, FileText } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Header() {
   const [location] = useLocation();
-  const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    if (!isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
 
   const navItems = [
     { href: "/", label: t("Home", "الرئيسية") },
@@ -18,6 +26,7 @@ export default function Header() {
     { href: "/masjid", label: t("Masjid e Nabawi", "المسجد النبوي") },
     { href: "/duas", label: t("Duas", "الأدعية") },
     { href: "/scholars", label: t("Scholars", "العلماء") },
+    { href: "/blog", label: t("Blog", "المدونة") },
   ];
 
   return (
@@ -36,11 +45,11 @@ export default function Header() {
           <nav className="hidden md:flex space-x-6">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <a className={`font-medium hover:text-primary transition ${
+                <span className={`font-medium hover:text-primary transition cursor-pointer ${
                   location === item.href ? "text-primary" : ""
                 }`}>
                   {item.label}
-                </a>
+                </span>
               </Link>
             ))}
           </nav>
@@ -64,14 +73,25 @@ export default function Header() {
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              onClick={toggleDarkMode}
+              className="hidden sm:flex"
             >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5" />
+              {isDarkMode ? (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                </svg>
               ) : (
-                <Moon className="h-5 w-5" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                </svg>
               )}
             </Button>
+            
+            <Link href="/blog">
+              <Button variant="ghost" size="icon" className="hidden sm:flex">
+                <FileText className="h-5 w-5" />
+              </Button>
+            </Link>
             
             <Sheet>
               <SheetTrigger asChild>
@@ -93,11 +113,11 @@ export default function Header() {
                   <nav className="flex flex-col space-y-4">
                     {navItems.map((item) => (
                       <Link key={item.href} href={item.href}>
-                        <a className={`font-medium py-2 border-b border-gray-100 dark:border-gray-800 ${
+                        <span className={`font-medium py-2 border-b border-gray-100 dark:border-gray-800 block cursor-pointer ${
                           location === item.href ? "text-primary" : ""
                         }`}>
                           {item.label}
-                        </a>
+                        </span>
                       </Link>
                     ))}
                   </nav>
