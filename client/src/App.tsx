@@ -13,6 +13,7 @@ import MasjidGuide from "@/pages/masjid-guide";
 import DuasCollection from "@/pages/duas-collection";
 import Scholars from "@/pages/scholars";
 import Blog from "@/pages/blog";
+import BlogPost from "@/pages/blog-post";
 import { LanguageProvider } from "@/hooks/use-language";
 import { useEffect } from "react";
 
@@ -36,6 +37,7 @@ function Router() {
           <Route path="/masjid" component={MasjidGuide} />
           <Route path="/duas" component={DuasCollection} />
           <Route path="/scholars" component={Scholars} />
+          <Route path="/blog/:slug" component={BlogPost} />
           <Route path="/blog" component={Blog} />
           <Route component={NotFound} />
         </Switch>
