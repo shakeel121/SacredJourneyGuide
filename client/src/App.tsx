@@ -17,8 +17,10 @@ import BlogPost from "@/pages/blog-post";
 import SignIn from "@/pages/signin";
 import SignUp from "@/pages/signup";
 import AdminDashboard from "@/pages/admin/dashboard";
+import Profile from "@/pages/profile";
 import { LanguageProvider } from "@/hooks/use-language";
 import { AuthProvider } from "@/hooks/use-auth";
+import { BookmarkProvider } from "@/hooks/use-bookmarks";
 import { useEffect } from "react";
 
 function Router() {
@@ -46,6 +48,7 @@ function Router() {
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
           <Route path="/admin/dashboard" component={AdminDashboard} />
+          <Route path="/profile" component={Profile} />
           <Route component={NotFound} />
         </Switch>
       </main>
@@ -59,10 +62,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Router />
-          </TooltipProvider>
+          <BookmarkProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Router />
+            </TooltipProvider>
+          </BookmarkProvider>
         </AuthProvider>
       </LanguageProvider>
     </QueryClientProvider>
