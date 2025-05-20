@@ -13,8 +13,13 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+interface BlogPostWithDates extends Omit<BlogPost, 'created_at' | 'updated_at'> {
+  created_at: Date;
+  updated_at: Date;
+}
+
 // Sample blog posts for demonstration
-const sampleBlogPosts: BlogPost[] = [
+const sampleBlogPosts: BlogPostWithDates[] = [
   {
     id: 1,
     title: "Essential Preparations for Your First Hajj Journey",
@@ -97,13 +102,13 @@ export default function BlogPage() {
   const [searchQuery, setSearchQuery] = useState("");
   
   // In a real application, fetch blog posts from API
-  const { data: blogPosts, isLoading } = useQuery<BlogPost[]>({
+  const { data: blogPosts, isLoading } = useQuery<BlogPostWithDates[]>({
     queryKey: ['/api/blog-posts', selectedCategory, searchQuery],
     queryFn: () => Promise.resolve(sampleBlogPosts),
   });
 
   // Get unique categories
-  const categories = blogPosts ? [...new Set(blogPosts.map(post => post.category))] : [];
+  const categories = blogPosts ? Array.from(new Set(blogPosts.map(post => post.category))) : [];
   
   // Filter posts based on category and search query
   const filteredPosts = blogPosts?.filter(post => {
@@ -127,7 +132,7 @@ export default function BlogPage() {
       year: "numeric",
       month: "long",
       day: "numeric"
-    }).format(new Date(date));
+    }).format(date);
   };
 
   return (
